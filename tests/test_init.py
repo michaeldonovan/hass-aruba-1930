@@ -20,6 +20,7 @@ _ENTRY_DATA = {
     "session_path": "cs7acddc6f",
     "username": "admin",
     "password": "secret",
+    "poll_interval": 30,
     "verify_ssl": True,
 }
 
@@ -28,6 +29,7 @@ def _make_entry() -> MagicMock:
     entry = MagicMock()
     entry.entry_id = "test_entry_id"
     entry.data = _ENTRY_DATA
+    entry.options = {}
     return entry
 
 
@@ -65,11 +67,64 @@ async def test_setup_entry_success(
     result = await async_setup_entry(hass, entry)
 
     assert result is True
+    mock_coordinator_cls.assert_called_once_with(hass, mock_client, 30)
     mock_client.login.assert_awaited_once()
     mock_coordinator.async_config_entry_first_refresh.assert_awaited_once()
     hass.config_entries.async_forward_entry_setups.assert_awaited_once()
     # Client must NOT be logged out on success.
     mock_client.logout.assert_not_awaited()
+
+
+@patch("custom_components.aruba1930.switch_client.SwitchClient", autospec=True)
+@patch("custom_components.aruba1930.coordinator.Aruba1930Coordinator", autospec=True)
+async def test_setup_entry_missing_poll_interval_uses_default(
+    mock_coordinator_cls: MagicMock, mock_client_cls: MagicMock
+) -> None:
+    """Older config entries without poll_interval should fall back to 30 seconds."""
+    from custom_components.aruba1930 import async_setup_entry
+
+    mock_client = mock_client_cls.return_value
+    mock_client.login = AsyncMock()
+    mock_client.logout = AsyncMock()
+
+    mock_coordinator = mock_coordinator_cls.return_value
+    mock_coordinator.async_config_entry_first_refresh = AsyncMock()
+    mock_coordinator.data = []
+
+    hass = _make_hass()
+    entry = _make_entry()
+    entry.data = {k: v for k, v in _ENTRY_DATA.items() if k != "poll_interval"}
+
+    result = await async_setup_entry(hass, entry)
+
+    assert result is True
+    mock_coordinator_cls.assert_called_once_with(hass, mock_client, 30)
+
+
+@patch("custom_components.aruba1930.switch_client.SwitchClient", autospec=True)
+@patch("custom_components.aruba1930.coordinator.Aruba1930Coordinator", autospec=True)
+async def test_setup_entry_options_override_entry_data(
+    mock_coordinator_cls: MagicMock, mock_client_cls: MagicMock
+) -> None:
+    """Options poll interval should override the config entry data."""
+    from custom_components.aruba1930 import async_setup_entry
+
+    mock_client = mock_client_cls.return_value
+    mock_client.login = AsyncMock()
+    mock_client.logout = AsyncMock()
+
+    mock_coordinator = mock_coordinator_cls.return_value
+    mock_coordinator.async_config_entry_first_refresh = AsyncMock()
+    mock_coordinator.data = []
+
+    hass = _make_hass()
+    entry = _make_entry()
+    entry.options = {"poll_interval": 90}
+
+    result = await async_setup_entry(hass, entry)
+
+    assert result is True
+    mock_coordinator_cls.assert_called_once_with(hass, mock_client, 90)
 
 
 def test_vendored_switch_client_importable() -> None:

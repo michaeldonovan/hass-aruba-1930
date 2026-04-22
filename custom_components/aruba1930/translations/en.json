@@ -10,6 +10,29 @@
           "session_path": "Session Path",
           "username": "Username",
           "password": "Password",
+          "poll_interval": "Polling interval (seconds)",
+          "verify_ssl": "Verify SSL certificate"
+        }
+      },
+      "reconfigure": {
+        "title": "Update Aruba 1930 connection",
+        "description": "Change the connection details for this switch.",
+        "data": {
+          "host": "Host",
+          "session_path": "Session Path",
+          "username": "Username",
+          "password": "Password",
+          "verify_ssl": "Verify SSL certificate"
+        }
+      },
+      "reconfigure": {
+        "title": "Reconfigure Aruba 1930 switch",
+        "description": "Update the switch connection details.",
+        "data": {
+          "host": "Host",
+          "session_path": "Session Path",
+          "username": "Username",
+          "password": "Password",
           "verify_ssl": "Verify SSL certificate"
         }
       }
@@ -21,6 +44,17 @@
     },
     "abort": {
       "already_configured": "Device is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Aruba 1930 options",
+        "description": "Adjust runtime behavior for this switch.",
+        "data": {
+          "poll_interval": "Polling interval (seconds)"
+        }
+      }
     }
   }
 }

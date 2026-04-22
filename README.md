@@ -18,10 +18,17 @@ The Aruba 1930 has no built-in REST API or CLI. This project reverse-engineers i
 
 ### Installation
 
-The Home Assistant integration is self-contained under `custom_components/aruba1930/`.
-Home Assistant can install it via HACS, or you can copy that directory into your Home Assistant configuration manually.
+#### HACS (recommended)
 
-Use HACS or copy `custom_components/aruba1930` into your Home Assistant configuration directory:
+1. In Home Assistant, open **HACS → Integrations**.
+2. Click the three-dot menu (⋮) in the top-right and select **Custom repositories**.
+3. Add `https://github.com/michaeldonovan/hass-aruba-1930` as an **Integration**.
+4. Search for **Aruba 1930** and install it.
+5. Restart Home Assistant.
+
+#### Manual
+
+Copy `custom_components/aruba1930` into your Home Assistant configuration directory:
 
 ```
 <ha_config>/
@@ -29,7 +36,7 @@ Use HACS or copy `custom_components/aruba1930` into your Home Assistant configur
     └── aruba1930/
 ```
 
-Restart Home Assistant and add the integration via the UI.
+Restart Home Assistant and add the integration via **Settings → Integrations → Add Integration**.
 
 No separate REST API server is required for the integration.
 

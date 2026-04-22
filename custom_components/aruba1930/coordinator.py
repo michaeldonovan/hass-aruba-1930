@@ -19,7 +19,12 @@ _LOGGER = logging.getLogger(__name__)
 class Aruba1930Coordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
     """Coordinator to manage fetching data from the Aruba 1930 switch."""
 
-    def __init__(self, hass: HomeAssistant, client: Any) -> None:
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        client: Any,
+        poll_interval: int = DEFAULT_SCAN_INTERVAL,
+    ) -> None:
         """Initialize the coordinator.
 
         Args:
@@ -30,7 +35,7 @@ class Aruba1930Coordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
             hass,
             _LOGGER,
             name="Aruba 1930",
-            update_interval=timedelta(seconds=DEFAULT_SCAN_INTERVAL),
+            update_interval=timedelta(seconds=poll_interval),
         )
         self.client = client
 

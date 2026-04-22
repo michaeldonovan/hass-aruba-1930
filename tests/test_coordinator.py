@@ -20,6 +20,13 @@ async def test_coordinator_returns_port_data(mock_switch_client: MagicMock) -> N
     assert data == mock_switch_client.get_ports.return_value
 
 
+async def test_coordinator_uses_configured_poll_interval(mock_switch_client: MagicMock) -> None:
+    """Coordinator update interval should come from config entry data."""
+    coordinator = Aruba1930Coordinator(MagicMock(), mock_switch_client, poll_interval=45)
+
+    assert coordinator.update_interval.total_seconds() == 45
+
+
 async def test_coordinator_auth_error_raises_config_entry_auth_failed(
     mock_switch_client: MagicMock,
 ) -> None:

@@ -86,8 +86,46 @@ class _MockConfigFlow:
     def async_abort(self, *, reason: str) -> dict:
         return {"type": "abort", "reason": reason}
 
+    async def async_update_reload_and_abort(
+        self,
+        config_entry: object,
+        *,
+        data_updates: dict | None = None,
+        options_updates: dict | None = None,
+    ) -> dict:
+        if data_updates is not None:
+            config_entry.data = data_updates
+        if options_updates is not None:
+            config_entry.options = options_updates
+        return {"type": "abort", "reason": "reconfigure_success"}
+
+
+class _OptionsFlowWithConfigEntry:
+    """Minimal stub for homeassistant.config_entries.OptionsFlowWithConfigEntry."""
+
+    def __init__(self, config_entry: object) -> None:
+        self.config_entry = config_entry
+
+    def async_create_entry(self, *, title: str = "", data: dict) -> dict:
+        return {"type": "create_entry", "title": title, "data": data}
+
+    def async_show_form(
+        self,
+        *,
+        step_id: str,
+        data_schema: object = None,
+        errors: dict | None = None,
+    ) -> dict:
+        return {
+            "type": "form",
+            "step_id": step_id,
+            "data_schema": data_schema,
+            "errors": errors or {},
+        }
+
 
 _ha_config_entries.ConfigFlow = _MockConfigFlow
+_ha_config_entries.OptionsFlowWithConfigEntry = _OptionsFlowWithConfigEntry
 _ha_config_entries.ConfigFlowResult = dict
 _ha_config_entries.ConfigEntry = MagicMock()
 _ha_config_entries.AbortFlow = _AbortFlow

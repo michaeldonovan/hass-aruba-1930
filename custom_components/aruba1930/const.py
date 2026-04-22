@@ -10,6 +10,7 @@ PLATFORMS = [Platform.SWITCH, Platform.SENSOR]
 DEFAULT_SCAN_INTERVAL = 30
 
 # Config entry keys (not provided by homeassistant.const)
+CONF_POLL_INTERVAL = "poll_interval"
 CONF_SESSION_PATH = "session_path"
 CONF_VERIFY_SSL = "verify_ssl"
 
