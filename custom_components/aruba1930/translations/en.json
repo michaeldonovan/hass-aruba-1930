@@ -1,0 +1,26 @@
+{
+  "title": "Aruba 1930",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to Aruba 1930 switch",
+        "description": "Enter your switch connection details.",
+        "data": {
+          "host": "Host",
+          "session_path": "Session Path",
+          "username": "Username",
+          "password": "Password",
+          "verify_ssl": "Verify SSL certificate"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect. Please check the host and session path.",
+      "invalid_auth": "Invalid username or password.",
+      "unknown": "Unexpected error."
+    },
+    "abort": {
+      "already_configured": "Device is already configured."
+    }
+  }
+}
