@@ -1,4 +1,9 @@
-# aruba1930api
+
+
+> [!WARNING]
+> **This project was LLM-generated and is largely untested.** It probably contain bugs and security issues, and you probably shouldn't use it
+
+# Aruba 1930 PoE Control
 
 Monitoring and control for Power-over-Ethernet (PoE) on Aruba 1930 switches.
 
@@ -13,8 +18,8 @@ The Aruba 1930 has no built-in REST API or CLI. This project reverse-engineers i
 
 ### Installation
 
-This integration is designed for a self-contained local install from this repository.
-The shared switch client lives in `custom_components/aruba1930/switch_client.py`, and the repo packaging installs both that package and `aruba1930api/` so the REST app can import the same implementation.
+The Home Assistant integration is self-contained under `custom_components/aruba1930/`.
+Home Assistant can install it via HACS, or you can copy that directory into your Home Assistant configuration manually.
 
 Use HACS or copy `custom_components/aruba1930` into your Home Assistant configuration directory:
 
@@ -25,6 +30,8 @@ Use HACS or copy `custom_components/aruba1930` into your Home Assistant configur
 ```
 
 Restart Home Assistant and add the integration via the UI.
+
+No separate REST API server is required for the integration.
 
 ### Config flow fields
 
@@ -177,7 +184,7 @@ https://192.168.1.1/cs7acddc6f/hpe/config/login.htm
                     ^^^^^^^^^^^
 ```
 
-This value is static — it is embedded in the switch firmware and does not change per login or reboot.
+This value appears to be static and firmware-defined. It does not change per login. Stability across reboots has not been verified yet.
 
 ---
 
