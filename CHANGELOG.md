@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.3.0 - 2026-04-22
+
+Changes since `v0.2.0`:
+
+Fixes:
+- install ruff for CI lint checks (d4f2243)
+- set GH_REPO for release workflow (4fe864c)
+
 ## v0.2.0 - 2026-04-22
 
 Initial release notes:
