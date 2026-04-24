@@ -1,4 +1,4 @@
-"""Base entity class for Aruba 1930."""
+"""Base entity classes for Aruba 1930."""
 
 from typing import Any
 
@@ -8,21 +8,14 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import DOMAIN
 
 
-class Aruba1930Entity(CoordinatorEntity):
-    """Base entity for an Aruba 1930 port."""
+class Aruba1930DeviceEntity(CoordinatorEntity):
+    """Base entity bound to the Aruba 1930 device."""
 
     _attr_has_entity_name = True
 
-    def __init__(self, coordinator, port_id: int, entry_id: str) -> None:
-        """Initialize the base entity.
-
-        Args:
-            coordinator: The Aruba1930Coordinator instance.
-            port_id: The switch interface ID for this port.
-            entry_id: The config entry ID for deduplication.
-        """
+    def __init__(self, coordinator, entry_id: str) -> None:
+        """Initialize the base device entity."""
         super().__init__(coordinator)
-        self._port_id = port_id
         self._entry_id = entry_id
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, entry_id)},
@@ -30,6 +23,21 @@ class Aruba1930Entity(CoordinatorEntity):
             manufacturer="Aruba",
             model="1930",
         )
+
+
+class Aruba1930Entity(Aruba1930DeviceEntity):
+    """Base entity for an Aruba 1930 port."""
+
+    def __init__(self, coordinator, port_id: int, entry_id: str) -> None:
+        """Initialize the base port entity.
+
+        Args:
+            coordinator: The Aruba1930Coordinator instance.
+            port_id: The switch interface ID for this port.
+            entry_id: The config entry ID for deduplication.
+        """
+        super().__init__(coordinator, entry_id)
+        self._port_id = port_id
 
     @property
     def port_data(self) -> dict[str, Any] | None:

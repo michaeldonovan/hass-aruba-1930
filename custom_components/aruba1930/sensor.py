@@ -19,7 +19,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DETECTION_STATUS_MAP, DOMAIN
-from .entity import Aruba1930Entity
+from .entity import Aruba1930DeviceEntity, Aruba1930Entity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ async def async_setup_entry(
     runtime_data = hass.data[DOMAIN][entry.entry_id]
     coordinator = runtime_data.coordinator
 
-    sensors: list[SensorEntity] = []
+    sensors: list[SensorEntity] = [Aruba1930TotalPowerSensor(coordinator, entry.entry_id)]
     for port in coordinator.data:
         port_id = port["id"]
         sensors.append(Aruba1930PowerSensor(coordinator, port_id, entry.entry_id))
@@ -42,6 +42,27 @@ async def async_setup_entry(
         sensors.append(Aruba1930CurrentSensor(coordinator, port_id, entry.entry_id))
 
     async_add_entities(sensors)
+
+
+class Aruba1930TotalPowerSensor(Aruba1930DeviceEntity, SensorEntity):
+    """Total PoE power usage sensor for the switch."""
+
+    _attr_native_unit_of_measurement = UnitOfPower.WATT
+    _attr_device_class = SensorDeviceClass.POWER
+    _attr_state_class = SensorStateClass.MEASUREMENT
+
+    def __init__(self, coordinator, entry_id: str) -> None:
+        """Initialize the sensor."""
+        super().__init__(coordinator, entry_id)
+        self._attr_unique_id = f"{entry_id}_total_poe_power"
+        self._attr_name = "Total PoE Power"
+
+    @property
+    def native_value(self) -> float | None:
+        """Return the total power draw in watts."""
+        if self.coordinator.data is None:
+            return None
+        return sum(port["power_mw"] for port in self.coordinator.data) / 1000.0
 
 
 class Aruba1930PowerSensor(Aruba1930Entity, SensorEntity):

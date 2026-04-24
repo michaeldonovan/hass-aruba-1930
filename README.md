@@ -54,10 +54,11 @@ See [Finding the session path](#finding-the-session-path) below.
 
 ### Entities
 
-The integration creates the following entities for **each PoE-capable port**:
+The integration creates one switch-level total usage sensor plus the following entities for **each PoE-capable port**:
 
 | Platform | Entity | Unit | Enabled by default |
 |---|---|---|---|
+| `sensor` | Total PoE Power | W | Yes |
 | `switch` | Port N PoE | — | Yes |
 | `sensor` | Port N Power | W | Yes |
 | `sensor` | Port N Status | — | Yes |
@@ -65,6 +66,8 @@ The integration creates the following entities for **each PoE-capable port**:
 | `sensor` | Port N Current | A | No |
 
 **Status sensor values:** `delivering_power` · `none` · `unknown`
+
+`Total PoE Power` reports the sum of `Port N Power` across all PoE-capable ports on the switch.
 
 Voltage and Current sensors are disabled by default to reduce clutter. Enable them individually in **Settings → Entities**.
 
