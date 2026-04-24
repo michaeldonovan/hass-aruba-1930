@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.4.0 - 2026-04-24
+
+Changes since `v0.3.0`:
+
+Features:
+- add switch total PoE power sensor (2c98119)
+
 ## v0.3.0 - 2026-04-22
 
 Changes since `v0.2.0`:
